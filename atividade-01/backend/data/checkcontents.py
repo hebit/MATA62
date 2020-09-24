@@ -10,7 +10,10 @@ filenames.sort()
 for name in filenames:
     month_year = search(r"(\d+)_(\d+)",name).groups()
     with open(name, newline='') as vra_file:
-        vra_csvreader = reader(vra_file, delimiter=';')
-        count = 0
-        print(name)
-        print(next(vra_csvreader)[0])
+        # vra_csvreader = reader(vra_file, delimiter=';')
+        # count = 0
+        # print(name)
+        # print(next(vra_csvreader)[0])
+
+        if vra_file.readline()[0] == '"':
+            print(name)
