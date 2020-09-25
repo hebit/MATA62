@@ -14,9 +14,10 @@ for name in filenames:
         print(f"reading {name}")
         vra_csvreader = reader(vra_file, delimiter=';')
         lines = list(vra_csvreader)
-        print(f"lines[0][11] is {lines[0][11]}")
-        lines[0][11] = 'codigo_justificativa'
-        print(f"lines[0][11] is {lines[0][11]}")
+        for line in lines:
+            for cell in line:
+                cell = cell.upper()
+
     with open(name, mode='w',newline='') as vra_file:
         # print(f"writing {name}")
         vra_csvwriter = writer(vra_file,delimiter=';')
