@@ -54,9 +54,9 @@ for name in filenames:
         lines = list(vra_csvreader)
         for i in range(len(lines)):
             for j in range(6,10):
-                if search(pattC+OR+pattD+OR+pattL+OR+pattM,lines[i][j]):
+                if search(pattB+OR+pattE+OR+pattH,lines[i][j]):
                     count+=1
-                    lines[i][j] = lines[i][j][:3] + '0' + lines[i][j][3:]
+                    lines[i][j] = '0'+ lines[i][j]
                     print(lines[i][j])
         if count != oldcount:
             with open(name, mode='w',newline='') as vra_file:

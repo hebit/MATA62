@@ -25,7 +25,7 @@ pattH = r"^\d/1[012]/201[56789] [012]\d:[0-5]\d$" # 1/11/2017 23:59
 pattI = r"^[012]\d/1[012]/201[56789] [012]\d:[0-5]\d$" # 11/11/2017 23:59
 pattJ = r"^3[01]/1[012]/201[56789] [012]\d:[0-5]\d$" # 30/11/2017 23:59
 
-all_with_clock = pattB+OR+pattC+OR+pattD+OR+pattE+OR+pattF+OR+pattG+OR+pattH+OR+pattI+OR+pattJ
+all_with_clock = pattF+OR+pattG+OR+pattI+OR+pattJ
 
 # grupo 4 => mes com 1 digito sem horario
 pattK = r"^\d/\d/201[56789]$" # 1/9/2017
@@ -53,21 +53,17 @@ for name in filenames:
         next(vra_csvreader)
         for row in vra_csvreader:
             if not search(pattA+OR+all_with_clock,row[6]):
-                # if search(all_no_clock,row[6]):
                 count+=1
                 messages[0].append(f"6 {name} {row[0]} {row[1]} -> {row[6]}")
-            if not search(pattA+OR+all_with_clock+OR+all_no_clock,row[7]):
-                # if search(all_no_clock,row[7]):
+            if not search(pattA+OR+all_with_clock,row[7]):
                 count+=1
-                messages[1].append(f"6 {name} {row[0]} {row[1]} -> {row[7]}")
-            if not search(pattA+OR+all_with_clock+OR+all_no_clock,row[8]):
-                # if search(all_no_clock,row[8]):
+                messages[1].append(f"7 {name} {row[0]} {row[1]} -> {row[7]}")
+            if not search(pattA+OR+all_with_clock,row[8]):
                 count+=1
-                messages[2].append(f"6 {name} {row[0]} {row[1]} -> {row[8]}")
-            if not search(pattA+OR+all_with_clock+OR+all_no_clock,row[9]):
-                # if search(all_no_clock,row[9]):
+                messages[2].append(f"8 {name} {row[0]} {row[1]} -> {row[8]}")
+            if not search(pattA+OR+all_with_clock,row[9]):
                 count+=1
-                messages[3].append(f"6 {name} {row[0]} {row[1]} -> {row[9]}")
+                messages[3].append(f"9 {name} {row[0]} {row[1]} -> {row[9]}")
 print(count)
         #
         # while partida_prevista == "":
