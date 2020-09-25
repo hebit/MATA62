@@ -8,7 +8,7 @@ filenames.remove("renamefield.py")
 filenames.sort()
 
 OR = "|"
-pattA = r"^[ +]$" # empty string
+pattA = r"^$" # empty string
 
 # grupo 1 => mes com 1 digito com horario
 pattB = r"^\d/\d/201[56789] [012]\d:[0-5]\d$" # 1/9/2017 23:59
@@ -42,7 +42,8 @@ pattQ = r"^\d/1[012]/201[56789]$" # 1/11/2017
 pattR = r"^[012]\d/1[012]/201[56789]$" # 11/11/2017
 pattS = r"^3[01]/1[012]/201[56789]$" # 30/11/2017
 all_no_clock = pattK+OR+pattL+OR+pattM+OR+pattN+OR+pattO+OR+pattP+OR+pattQ+OR+pattR+OR+pattS
-
+count = 0
+messages = [[] for _ in range(4)]
 for name in filenames:
     month_year = search(r"(\d+)_(\d+)",name).groups()
 
@@ -51,15 +52,32 @@ for name in filenames:
         # print(name)
         next(vra_csvreader)
         for row in vra_csvreader:
-            if not search(pattA+OR+all_with_clock+OR+all_no_clock,row[6]) and row[6].strip():
-                print(row[6])
+            if not search(pattA+OR+all_with_clock,row[6]):
+                # if search(all_no_clock,row[6]):
+                count+=1
+                messages[0].append(f"6 {name} {row[0]} {row[1]} -> {row[6]}")
+            if not search(pattA+OR+all_with_clock+OR+all_no_clock,row[7]):
+                # if search(all_no_clock,row[7]):
+                count+=1
+                messages[1].append(f"6 {name} {row[0]} {row[1]} -> {row[7]}")
+            if not search(pattA+OR+all_with_clock+OR+all_no_clock,row[8]):
+                # if search(all_no_clock,row[8]):
+                count+=1
+                messages[2].append(f"6 {name} {row[0]} {row[1]} -> {row[8]}")
+            if not search(pattA+OR+all_with_clock+OR+all_no_clock,row[9]):
+                # if search(all_no_clock,row[9]):
+                count+=1
+                messages[3].append(f"6 {name} {row[0]} {row[1]} -> {row[9]}")
+print(count)
         #
         # while partida_prevista == "":
         #     partida_prevista = next(vra_csvreader)[8]
         # if partida_prevista[3:10] != f"{month_year[1]}/{month_year[0]}":
         #     print(name)
         #     print(f"ERRADO! deveria ser {month_year[1]}/{month_year[0]} e é {partida_prevista[3:10]}")
-
+for t in messages:
+    for m in t:
+        print(m)
 
 # name = "VRA_2017_09.csv"
 # month_year = search(r"(\d+)_(\d+)",name).groups()
