@@ -14,10 +14,11 @@ for name in filenames:
         print(f"reading {name}")
         vra_csvreader = reader(vra_file, delimiter=';')
         lines = list(vra_csvreader)
-        lines[0][4] = 'sg_aeroporto_origem_icao'
-        print(f"lines[0][4] is {lines[0][4]}")
+        print(f"lines[0][11] is {lines[0][11]}")
+        lines[0][11] = 'codigo_justificativa'
+        print(f"lines[0][11] is {lines[0][11]}")
     with open(name, mode='w',newline='') as vra_file:
-        print(f"writing {name}")
+        # print(f"writing {name}")
         vra_csvwriter = writer(vra_file,delimiter=';')
         vra_csvwriter.writerows(lines)
-        print(f"written {name}")
+        # print(f"written {name}")

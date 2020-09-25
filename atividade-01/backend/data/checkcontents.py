@@ -12,4 +12,6 @@ for name in filenames:
 
     with open(name, newline='') as vra_file:
         vra_csvreader = reader(vra_file, delimiter=';')
-        print(next(vra_csvreader)[4])
+        # print(name)
+        # print(next(vra_csvreader)[8])
+        print(next(vra_csvreader)[11])
