@@ -8,6 +8,7 @@ filenames.remove("renamefield.py")
 filenames.sort()
 
 count = 0
+oldcount = 0
 for name in filenames:
     month_year = search(r"(\d+)_(\d+)",name).groups()
     lines = []
@@ -15,17 +16,20 @@ for name in filenames:
         print(f"reading {name}")
         vra_csvreader = reader(vra_file, delimiter=';')
         lines = list(vra_csvreader)
-        for line in lines:
-            for cell in line:
-                if cell != cell.strip():
+        for i in range(len(lines)):
+            for j in range(len(lines[i])):
+                if lines[i][j] != lines[i][j].strip():
                     count+=1
-                cell = cell.strip()
-                with open(name, mode='w',newline='') as vra_file:
-                    # print(f"writing {name}")
-                    vra_csvwriter = writer(vra_file,delimiter=';')
-                    vra_csvwriter.writerows(lines)
-                    # print(f"written {name}")
+                    lines[i][j] = lines[i][j].strip() + ''
 
+        if count != oldcount:
+            with open(name, mode='w',newline='') as vra_file:
+                # print(f"writing {name}")
+                vra_csvwriter = writer(vra_file,delimiter=';')
+                vra_csvwriter.writerows(lines)
+                # print(f"written {name}")
+
+        oldcount = count
 print(count)
 
                 # pattA = r"^$" # empty string
