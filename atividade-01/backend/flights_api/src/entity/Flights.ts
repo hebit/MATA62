@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn } from 'typeorm'
 
 @Entity()
 export class Flights {
-    
+
     @PrimaryColumn()
     SG_EMPRESA_ICAO: string
 
@@ -22,20 +22,20 @@ export class Flights {
     SG_AEROPORTO_DESTINO_ICAO: string
 
     @Column()
-    PARTIDA_PREVISTA: Date
+    PARTIDA_PREVISTA: timestamp
 
     @Column()
-    PARTIDA_REAL: Date
+    PARTIDA_REAL: timestamp
 
     @Column()
-    CHEGADA_PREVISTA: Date
+    CHEGADA_PREVISTA: timestamp
 
     @Column()
-    CHEGADA_REAL: Date
+    CHEGADA_REAL: timestamp
 
     @Column()
     SITUACAO: string
-    
+
     @Column()
     CODIGO_JUSTIFICATIVA: string
 
