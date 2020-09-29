@@ -1,0 +1,17 @@
+SG_EMPRESA_ICAO - 3 caracteres.
+
+NR_VOO - código alfanumérico variando até 6 caracteres.
+
+CODIGO_DI - um número de 0 a 9, letras D ou E (não presentes na nossa base de dados), ou vazio.
+
+CODIGO_TIPO_LINHA - Sempre uma letra maiúscula, nenhum vazio.
+
+SG_AEROPORTO_ORIGEM_ICAO - código alfanumérico 4 caracteres
+
+SG_AEROPORTO_DESTINO_ICAO - código alfanumérico 4 caracteres
+
+PARTIDA_PREVISTA, PARTIDA_REAL, CHEGADA_PREVISTA, CHEGADA_REAL - datas no formato 01/01/2015 23:59, algumas estão em branco (string vazia)
+
+SITUACAO - apenas duas possibilidades: 'CANCELADO' e 'REALIZADO', nenhuma em branco.
+
+CODIGO_JUSTIFICATIVA - cerca de 40 possibilidades, ou dois caracteres, ou vazio.

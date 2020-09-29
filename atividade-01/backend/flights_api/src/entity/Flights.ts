@@ -22,22 +22,21 @@ export class Flights {
     SG_AEROPORTO_DESTINO_ICAO: string
 
     @Column()
-    PARTIDA_PREVISTA: timestamp
+    PARTIDA_PREVISTA: string
 
     @Column()
-    PARTIDA_REAL: timestamp
+    PARTIDA_REAL: string
 
     @Column()
-    CHEGADA_PREVISTA: timestamp
+    CHEGADA_PREVISTA: string
 
     @Column()
-    CHEGADA_REAL: timestamp
+    CHEGADA_REAL: string
 
     @Column()
     SITUACAO: string
 
     @Column()
     CODIGO_JUSTIFICATIVA: string
-
 
 }
