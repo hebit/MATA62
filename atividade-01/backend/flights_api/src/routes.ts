@@ -1,12 +1,9 @@
-import { Router, Request, Response } from 'express'
-import flightsRouter from './controller/FlightsController'
+import { Router, Request, Response } from "express";
+import FlightController from "./controller/FlightsController";
 
-const routes = Router()
+const routes = Router();
 
-routes.get('/hello', async (request: Request, response: Response) => {
-        return response.json({ message: "Hello World"}) 
-})
-
-routes.use('/', flightsRouter)
+routes.get("/years/:year", FlightController.getYear);
+routes.get("/stats", FlightController.stats);
 
 export default routes;

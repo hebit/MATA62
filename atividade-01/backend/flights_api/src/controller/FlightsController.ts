@@ -1,43 +1,111 @@
-import { Request, Response, Router } from 'express'
-import { getRepository, getCustomRepository } from 'typeorm'
-import { Flights } from '../entity/Flights'
-import Parser from 'csv-parse'
-import { FSWatcher, fstat, readFile, fsync } from 'fs'
-import fsPromises from 'fs'
-import path, { delimiter } from 'path'
+import { Request, Response } from "express";
 
-const flightsRouter = Router()
+import { PrismaClient } from "@prisma/client";
+import { FlightStatus, FlihgtYears } from "../utils/types";
+import {
+  getUnixTimeFromBrasiliaTimezone,
+  getYearRange,
+} from "../utils/getYearRange";
 
-//ler files//
-const file = path.join(__dirname, '../../data/VRA_2015_01.csv')
-const csvData = []
+type FilterQuery = {
+  page?: string;
+  start_at?: string;
+  finish_at?: string;
+};
 
-flightsRouter.get('/', async(request: Request, response: Response) => {
-    const flights = getRepository(Flights)
+type Params = {
+  year?: string;
+};
 
-    fsPromises.createReadStream(file).pipe(Parser({delimiter: ';'})).on('data', row => {
-        
-        flights.save({
-            SG_EMPRESA_ICAO: row[0].toString(),
-            NR_VOO: row[1].toString(),
-            CODIGO_DI: row[2].toString(),
-            CODIGO_TIPO_LINHA: row[3].toString(), 
-            SG_AEROPORTO_ORIGEM_ICAO: row[4].toString(),
-            SG_AEROPORTO_DESTINO_ICAO: row[5].toString(),
-            PARTIDA_PREVISTA: row[6].toString(),
-            PARTIDA_REAL: row[7].toString(), 
-            CHEGADA_PREVISTA: row[8].toString(),
-            CHEGADA_REAL: row[9].toString(),
-            SITUACAO: row[10].toString(),
-            CODIGO_JUSTIFICATIVA: row[11].toString()
+const prisma = new PrismaClient();
 
-         })
+class FlightController {
+  static async getYear(
+    request: Request<Params, any, any, FilterQuery>,
+    response: Response
+  ) {
+    const year = request.params.year ? Number(request.params.year) : 2015;
+    const page = request.query.page ? Number(request.query.page) : 0;
 
-    })
+    const range = getYearRange(year);
+    if (request.query.start_at) {
+      range.start = getUnixTimeFromBrasiliaTimezone(request.query.start_at);
+    }
+    if (request.query.finish_at) {
+      range.end = getUnixTimeFromBrasiliaTimezone(request.query.finish_at);
+    }
 
-    response.json({ voos: "ok" })
+    const take = 15;
+    const flights = await prisma.flights.findMany({
+      where: {
+        AND: {
+          part_prev: {
+            gte: range.start,
+            lte: range.end,
+          },
+        },
+      },
+      skip: page <= 1 ? 0 : (page - 1) * take,
+      take,
+      orderBy: {
+        part_real: "asc",
+      },
+    });
+    return response.json({ flights });
+  }
 
-})
+  static async stats(request: Request, response: Response) {
+    const years = [
+      FlihgtYears._2015,
+      FlihgtYears._2016,
+      FlihgtYears._2017,
+      FlihgtYears._2018,
+      FlihgtYears._2019,
+      FlihgtYears._2020,
+    ];
 
+    const statsPromises = years.map(async (year) => {
+      const range = getYearRange(year);
+      const canceledPromise = prisma.flights.count({
+        where: {
+          situacao: FlightStatus.CANCELED,
+          part_prev: { gte: range.start, lte: range.end },
+        },
+      });
 
-export default flightsRouter;
+      const executedPromise = prisma.flights.count({
+        where: {
+          situacao: FlightStatus.EXECUTED,
+          part_prev: { gte: range.start, lte: range.end },
+        },
+      });
+
+      const [canceled, executed] = await Promise.all([
+        canceledPromise,
+        executedPromise,
+      ]);
+
+      const total = await prisma.flights.count({
+        where: {
+          part_prev: {
+            gte: range.start,
+            lte: range.end,
+          },
+        },
+      });
+
+      return {
+        year,
+        canceled,
+        executed,
+        total,
+      };
+    });
+
+    const stats = await Promise.all(statsPromises);
+
+    return response.json({ stats });
+  }
+}
+
+export default FlightController;
