@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model flights {
+  id             Int     @id @default(autoincrement())
+  sg_empresa     String?
+  nr_voo         String?
+  cod_di         String?
+  cod_tipo_linha String?
+  sg_aerop_orig  String?
+  sg_aerop_dest  String?
+  part_prev      Int?
+  part_real      Int?
+  cheg_prev      Int?
+  cheg_real      Int?
+  situacao       Int?
+  cod_just       String?
+}
