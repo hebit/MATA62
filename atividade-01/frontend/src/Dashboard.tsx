@@ -1,7 +1,11 @@
-import { Container, Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import { Container, Grid, Button } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import ReactLoading from 'react-loading';
 import FlightTable from "./components/FlightTable";
-import PreviewCard from "./components/PreviewCard";
+import PreviewCard, { Props } from "./components/PreviewCard";
+import api from './api';
+import Graph from "./components/Graph";
+import { render } from "@testing-library/react";
 
 const previews = [
   { year: 2015, confirmed: 12, canceled: 12, total: 24000 },
@@ -16,22 +20,45 @@ function App() {
   const [selectedYear, setSelectedYear] = useState<undefined | number>(
     undefined
   );
-  return (
-    <Container maxWidth="md">
-      <Grid container spacing={2}>
-        {previews.map((preview) => (
-          <Grid key={preview.year} id="div1" item xs={12} sm={6} md={4}>
-            <PreviewCard
-              {...preview}
-              selected={selectedYear === preview.year}
-              onSelect={(year) => setSelectedYear(year)}
-            />
-          </Grid>
-        ))}
-      </Grid>
-      <FlightTable selectedYear={selectedYear} />
-    </Container>
-  );
+  
+  const [stats, setStats] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [graph, setGraph] = useState(false);
+
+  useEffect(() => {
+    api.get('stats')
+    .then(response => {
+      console.log(response.data)
+      setStats(response.data.stats)
+      setIsLoading(!isLoading)
+    })
+  }, [])
+
+  function showGraph() {
+    setGraph(!graph);
+  }
+
+  if(isLoading) return(<ReactLoading type="spin" color="#2a3d91" height={'10%'} width={'10%'}/>);
+  else {
+    return ( 
+      <Container maxWidth="md">
+        <Grid container spacing={2}>
+          {stats.map((preview: Props) => (
+            <Grid key={preview.year} id="div1" item xs={12} sm={6} md={4}>
+              <PreviewCard
+                {...preview}
+                selected={selectedYear === preview.year}
+                onSelect={(year) => setSelectedYear(year)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+        {selectedYear && <FlightTable selectedYear={selectedYear} />}
+        <Button onClick={() => showGraph()} style={{margin: 30, marginLeft: 0}} >See Graph</Button>
+        {graph && <Graph stats={stats} />}
+      </Container>
+    );
+  }
 }
 
 export default App;

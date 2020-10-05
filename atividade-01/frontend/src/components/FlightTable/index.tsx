@@ -8,24 +8,42 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../api";
 
 import { Container } from "./styles";
 
-type Props = {
+export type Props2 = {
   selectedYear?: number;
+  sg_empresa?: string;
+  situacao?: number;
+  part_prev?: number;
+  cheg_prev?: number;
 };
 
-function FlightTable({ selectedYear }: Props) {
+function FlightTable({ selectedYear }: Props2) {
+  
+  const [flights, setFlights] = useState([]);
+
+  useEffect(() => {
+    api.get(`years/${selectedYear}`)
+    .then(response => {
+      console.log(response.data)
+      setFlights(response.data.flights)
+    })
+  }, [selectedYear])
+
   return (
     <Container>
       {selectedYear && (
         <Typography variant="body1">Dados de {selectedYear}</Typography>
       )}
-      <TableContainer component={Paper}>
+      {flights && (
+        flights.map((item: Props2) => (
+          <TableContainer component={Paper} style={{marginBottom: 10}}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
-            <TableRow>
+            <TableRow >
               <TableCell>Empresa</TableCell>
               <TableCell align="right">Status</TableCell>
               <TableCell align="right">Saida</TableCell>
@@ -36,26 +54,26 @@ function FlightTable({ selectedYear }: Props) {
           <TableBody>
             {[
               {
-                name: "test",
-                calories: "a",
-                fat: "b",
-                carbs: "c",
-                protein: "d",
+                empresa: item.sg_empresa,
+                status: item.situacao,
+                saida: item.part_prev,
+                chegada: item.cheg_prev,
               },
             ].map((row) => (
-              <TableRow key={row.name}>
+              <TableRow key={row.empresa}>
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row.empresa}
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell align="right">{row.status}</TableCell>
+                <TableCell align="right">{row.saida}</TableCell>
+                <TableCell align="right">{row.chegada}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+        ))
+      )}
     </Container>
   );
 }

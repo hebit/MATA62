@@ -106,6 +106,11 @@ class FlightController {
 
     return response.json({ stats });
   }
+
+  static async teste(request: Request, response: Response) {
+
+    return response.json({ message: 'teste' });
+  }
 }
 
 export default FlightController;
