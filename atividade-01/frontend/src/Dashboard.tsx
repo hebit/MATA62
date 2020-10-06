@@ -5,7 +5,6 @@ import FlightTable from "./components/FlightTable";
 import PreviewCard, { Props } from "./components/PreviewCard";
 import api from './api';
 import Graph from "./components/Graph";
-import { render } from "@testing-library/react";
 
 const previews = [
   { year: 2015, confirmed: 12, canceled: 12, total: 24000 },
@@ -18,6 +17,9 @@ const previews = [
 
 function App() {
   const [selectedYear, setSelectedYear] = useState<undefined | number>(
+    undefined
+  );
+  const [total, setTotal] = useState<undefined | number>(
     undefined
   );
   
@@ -53,9 +55,9 @@ function App() {
             </Grid>
           ))}
         </Grid>
-        {selectedYear && <FlightTable selectedYear={selectedYear} />}
         <Button onClick={() => showGraph()} style={{margin: 30, marginLeft: 0}} >See Graph</Button>
         {graph && <Graph stats={stats} />}
+        {selectedYear && <FlightTable selectedYear={selectedYear}/>}
       </Container>
     );
   }

@@ -6,7 +6,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Typography, Button
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import api from "../../api";
@@ -14,6 +14,7 @@ import api from "../../api";
 import { Container } from "./styles";
 
 export type Props2 = {
+  id?: number;
   selectedYear?: number;
   sg_empresa?: string;
   situacao?: number;
@@ -23,15 +24,21 @@ export type Props2 = {
 
 function FlightTable({ selectedYear }: Props2) {
   
-  const [flights, setFlights] = useState([]);
+  const [flights, setFlights] = useState<Props2[]>([]);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
-    api.get(`years/${selectedYear}`)
+    api.get(`years/${selectedYear}?page=${page}`)
     .then(response => {
-      console.log(response.data)
-      setFlights(response.data.flights)
+      console.log(response.data);
+      setFlights([...response.data.flights, ...flights])
     })
-  }, [selectedYear])
+  }, [selectedYear, page])
+
+  function loadData() {
+    if(flights.length < 15) return;
+    setPage(page+1);
+  }
 
   return (
     <Container>
@@ -40,7 +47,7 @@ function FlightTable({ selectedYear }: Props2) {
       )}
       {flights && (
         flights.map((item: Props2) => (
-          <TableContainer component={Paper} style={{marginBottom: 10}}>
+          <TableContainer onClick={() => console.log(item.id)} key={item.id} component={Paper} style={{marginBottom: 10}}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow >
@@ -68,12 +75,14 @@ function FlightTable({ selectedYear }: Props2) {
                 <TableCell align="right">{row.saida}</TableCell>
                 <TableCell align="right">{row.chegada}</TableCell>
               </TableRow>
+              
             ))}
           </TableBody>
         </Table>
       </TableContainer>
         ))
-      )}
+        )}
+        <Button onClick={() => loadData()} style={{margin: 30, marginLeft: 0}} >See More</Button>
     </Container>
   );
 }
