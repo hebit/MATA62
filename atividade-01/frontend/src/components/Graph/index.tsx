@@ -9,6 +9,7 @@ import {
   Area,
   ResponsiveContainer,
 } from "recharts";
+import { Stats } from "../../utils/types";
 
 const data = [
   { year: "2015", total: 2400, executed: 2400, canceled: 1400 },
@@ -20,62 +21,66 @@ const data = [
 ];
 
 type Props = {
-  stats: Array<{}>
+  stats: Array<Stats>;
 };
 
-function Graph(props:Props) {
-    return (
-      //  <ResponsiveContainer>
-      <AreaChart
-        width={830}
-        height={350}
-        data={props.stats}
-        margin={{ top: 30, right: 30, left: 30, bottom: 0 }}
-      >
-        <defs>
-          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-          </linearGradient>
-          <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-          </linearGradient>
-          <linearGradient id="colorCan" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#db4a30" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#db4a30" stopOpacity={0} />
-          </linearGradient>
-        </defs>
-        <XAxis dataKey="year" />
-        <YAxis />
-        <Legend />
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Area
-          type="monotone"
-          dataKey="total"
-          stroke="#8884d8"
-          fillOpacity={1}
-          fill="url(#colorUv)"
-        />
-        <Area
-          type="monotone"
-          dataKey="executed"
-          stroke="#82ca9d"
-          fillOpacity={1}
-          fill="url(#colorPv)"
-        />
-        <Area
-          type="monotone"
-          dataKey="canceled"
-          stroke="#db4a30"
-          fillOpacity={1}
-          fill="url(#colorCan)"
-        />
-      </AreaChart>
+function Graph({ stats }: Props) {
+  return (
+    //  <ResponsiveContainer>
+    <AreaChart
+      width={830}
+      height={350}
+      data={stats.map((stat) => ({
+        Total: stat.total,
+        Realizados: stat.executed,
+        Cancelados: stat.canceled,
+      }))}
+      margin={{ top: 30, right: 30, left: 30, bottom: 0 }}
+    >
+      <defs>
+        <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+          <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+        </linearGradient>
+        <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+          <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+        </linearGradient>
+        <linearGradient id="colorCan" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#db4a30" stopOpacity={0.8} />
+          <stop offset="95%" stopColor="#db4a30" stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <XAxis dataKey="year" />
+      <YAxis />
+      <Legend />
+      <CartesianGrid strokeDasharray="3 3" />
+      <Tooltip />
+      <Area
+        type="monotone"
+        dataKey="Total"
+        stroke="#8884d8"
+        fillOpacity={1}
+        fill="url(#colorUv)"
+      />
+      <Area
+        type="monotone"
+        dataKey="Realizados"
+        stroke="#82ca9d"
+        fillOpacity={1}
+        fill="url(#colorPv)"
+      />
+      <Area
+        type="monotone"
+        dataKey="Cancelados"
+        stroke="#db4a30"
+        fillOpacity={1}
+        fill="url(#colorCan)"
+      />
+    </AreaChart>
 
-      //</ResponsiveContainer>
-    );
+    //</ResponsiveContainer>
+  );
 }
 
 export default Graph;
