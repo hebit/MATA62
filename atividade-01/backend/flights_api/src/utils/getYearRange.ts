@@ -8,7 +8,7 @@ type YearRange = {
 };
 
 export function getDateFromBrasiliaTimezone(dateStr: string, time?: string) {
-  return toDate(`${dateStr}-03:00`);
+  return toDate(`${dateStr}T00:00:00-03:00`);
 }
 
 export function getUnixTimeFromBrasiliaTimezone(dateStr: string) {

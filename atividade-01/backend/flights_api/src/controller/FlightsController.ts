@@ -48,7 +48,7 @@ class FlightController {
       skip: page <= 1 ? 0 : (page - 1) * take,
       take,
       orderBy: {
-        part_real: "asc",
+        part_prev: "asc",
       },
     });
     return response.json({ flights });
@@ -61,7 +61,7 @@ class FlightController {
       FlihgtYears._2017,
       FlihgtYears._2018,
       FlihgtYears._2019,
-      FlihgtYears._2020,
+      // FlihgtYears._2020,
     ];
 
     const statsPromises = years.map(async (year) => {
@@ -108,8 +108,7 @@ class FlightController {
   }
 
   static async teste(request: Request, response: Response) {
-
-    return response.json({ message: 'teste' });
+    return response.json({ message: "teste" });
   }
 }
 
