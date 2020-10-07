@@ -6,6 +6,7 @@ import {
   getUnixTimeFromBrasiliaTimezone,
   getYearRange,
 } from "../utils/getYearRange";
+import { format, fromUnixTime } from "date-fns";
 
 type FilterQuery = {
   page?: string;
@@ -36,6 +37,8 @@ class FlightController {
     }
 
     const take = 15;
+    // console.log(format(fromUnixTime(range.start), "dd/MM/yyyy"));
+    console.log("\n");
     const flights = await prisma.flights.findMany({
       where: {
         AND: {

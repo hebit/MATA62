@@ -10,8 +10,10 @@ export type Flight = {
   selectedYear?: number;
   sg_empresa?: string;
   situacao?: number;
-  part_prev?: number;
+  part_prev: number;
+  part_real: number;
   cheg_prev?: number;
+  cheg_real?: number;
 };
 
 export const flightStatus = {

@@ -74,7 +74,7 @@ function App() {
           onClick={() => showGraph()}
           style={{ margin: 30, marginLeft: 0 }}
         >
-          See Graph
+          Mostrar Gráfico
         </Button>
         {graph && <Graph stats={stats} />}
         {selectedYear && (

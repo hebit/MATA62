@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "@types/recharts": "^1.8.16",
     "axios": "^0.20.0",
+    "date-fns": "^2.16.1",
     "number-abbreviate": "^2.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
