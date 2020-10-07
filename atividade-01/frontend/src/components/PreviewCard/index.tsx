@@ -4,12 +4,13 @@ import { CardContainer, CardText } from "./styles";
 //@ts-ignore
 import numberAbreviate from "number-abbreviate";
 
-type Props = {
+export type Props = {
   total: number;
   canceled: number;
-  confirmed: number;
+  confirmed?: number;
   year: number;
   selected?: boolean;
+  executed?: number;
   onSelect: (year?: number) => void;
 };
 
@@ -41,7 +42,7 @@ function PreviewCard(props: Props) {
           <Grid item xs={6}>
             <CardText type="confirmed">Confirmados</CardText>
             <Typography variant="body2">
-              {numberAbreviate(props.confirmed, 0)}
+              {numberAbreviate(props.executed, 0)}
             </Typography>
           </Grid>
           <Grid item xs={6}>

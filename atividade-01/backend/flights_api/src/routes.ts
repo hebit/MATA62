@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, response } from "express";
 import FlightController from "./controller/FlightsController";
 
 const routes = Router();
