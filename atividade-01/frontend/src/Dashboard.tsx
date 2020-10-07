@@ -5,7 +5,7 @@ import FlightTable from "./components/FlightTable";
 import PreviewCard from "./components/PreviewCard";
 import api from "./api";
 import Graph from "./components/Graph";
-import { Stats } from "./utils/types";
+import { Flight, Stats } from "./utils/types";
 
 const previews = [
   { year: 2015, confirmed: 12, canceled: 12, total: 24000 },
@@ -42,6 +42,11 @@ function App() {
     setGraph(!graph);
   }
 
+  const [flights, setFlights] = useState<Flight[]>([]);
+  function resetFlights() {
+    setFlights([]);
+  }
+
   if (isLoading)
     return (
       <ReactLoading type="spin" color="#2a3d91" height={"10%"} width={"10%"} />
@@ -55,7 +60,12 @@ function App() {
               <PreviewCard
                 {...preview}
                 selected={selectedYear === preview.year}
-                onSelect={(year) => setSelectedYear(year)}
+                onSelect={(year) => {
+                  if (year !== selectedYear) {
+                    resetFlights();
+                  }
+                  setSelectedYear(year);
+                }}
               />
             </Grid>
           ))}
@@ -67,7 +77,14 @@ function App() {
           See Graph
         </Button>
         {graph && <Graph stats={stats} />}
-        {selectedYear && <FlightTable selectedYear={selectedYear} />}
+        {selectedYear && (
+          <FlightTable
+            flights={flights}
+            setFlights={setFlights}
+            selectedYear={selectedYear}
+            resetFlights={resetFlights}
+          />
+        )}
       </Container>
     );
   }
