@@ -12,8 +12,8 @@ export type Flight = {
   situacao?: number;
   part_prev: number;
   part_real: number;
-  cheg_prev?: number;
-  cheg_real?: number;
+  cheg_prev: number;
+  cheg_real: number;
 };
 
 export const flightStatus = {

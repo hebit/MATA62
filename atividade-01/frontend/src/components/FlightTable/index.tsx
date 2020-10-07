@@ -138,7 +138,7 @@ function FlightTable({
                   <TableCell align="right">
                     {item.part_prev &&
                       format(fromUnixTime(item.part_prev), "dd/MM/yyyy HH:mm")}
-                    {item.part_real && item.part_real > item.part_prev && (
+                    {item.part_real > 0 && item.part_real > item.part_prev && (
                       <Badget
                         title={`Atraso de ${Math.round(
                           (item.part_real - item.part_prev) / 60
@@ -148,10 +148,10 @@ function FlightTable({
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    {item.part_real === 0
+                    {item.cheg_real === 0
                       ? "------------------------"
                       : format(
-                          fromUnixTime(item.part_real),
+                          fromUnixTime(item.cheg_real),
                           "dd/MM/yyyy HH:mm"
                         )}
                   </TableCell>
